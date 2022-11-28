@@ -45,6 +45,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A768D92293477A900C53678 /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				6AEF4338293244930037A9F1 /* DiaryViewController.swift */,
+				6A61FD1F2933ACFE00CC3FDD /* DiaryCollectionViewCell.swift */,
+				6A3821152933BAAB002874BF /* WriteDiaryViewController.swift */,
+			);
+			path = Diary;
+			sourceTree = "<group>";
+		};
+		6A768D93293477E400C53678 /* Star */ = {
+			isa = PBXGroup;
+			children = (
+				6A61FD212933AD4C00CC3FDD /* StarViewController.swift */,
+				6A61FD252933B0AA00CC3FDD /* StarCollectionViewCell.swift */,
+			);
+			path = Star;
+			sourceTree = "<group>";
+		};
+		6A768D942934780500C53678 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				6AEF4334293244930037A9F1 /* AppDelegate.swift */,
+				6AEF4336293244930037A9F1 /* SceneDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
 		6AEF4328293244930037A9F1 = {
 			isa = PBXGroup;
 			children = (
@@ -64,17 +92,13 @@
 		6AEF4333293244930037A9F1 /* Diary */ = {
 			isa = PBXGroup;
 			children = (
-				6AEF4334293244930037A9F1 /* AppDelegate.swift */,
-				6AEF4336293244930037A9F1 /* SceneDelegate.swift */,
-				6AEF4338293244930037A9F1 /* DiaryViewController.swift */,
-				6A61FD1F2933ACFE00CC3FDD /* DiaryCollectionViewCell.swift */,
+				6A768D942934780500C53678 /* Delegate */,
+				6A768D92293477A900C53678 /* Diary */,
+				6A768D93293477E400C53678 /* Star */,
 				6AEF433A293244930037A9F1 /* Main.storyboard */,
-				6AEF433D293244940037A9F1 /* Assets.xcassets */,
 				6AEF433F293244940037A9F1 /* LaunchScreen.storyboard */,
 				6AEF4342293244940037A9F1 /* Info.plist */,
-				6A61FD212933AD4C00CC3FDD /* StarViewController.swift */,
-				6A61FD252933B0AA00CC3FDD /* StarCollectionViewCell.swift */,
-				6A3821152933BAAB002874BF /* WriteDiaryViewController.swift */,
+				6AEF433D293244940037A9F1 /* Assets.xcassets */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
