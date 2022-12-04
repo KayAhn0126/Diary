@@ -32,7 +32,7 @@
         <scene sceneID="HUP-Qh-fmM">
             <objects>
                 <navigationController id="Uu5-x8-Hje" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="일기장" landscapeImage="folder" catalog="system" selectedImage="folder.fill" id="drm-mT-Bmx"/>
+                    <tabBarItem key="tabBarItem" title="일기장" image="folder" catalog="system" selectedImage="folder.fill" id="drm-mT-Bmx"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VlY-qI-g6h">
                         <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -94,6 +94,10 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="180" height="200"/>
+                                        <connections>
+                                            <outlet property="dateLabel" destination="wS4-M8-ef2" id="Dm4-OK-7Ql"/>
+                                            <outlet property="titleLabel" destination="iOT-LT-DmT" id="tKj-5Y-QHG"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -114,6 +118,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="21R-OB-87k" id="pxd-QY-rgu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -190,8 +197,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="일기 작성" id="Kwa-3u-B3w">
-                        <barButtonItem key="rightBarButtonItem" title="등록" id="XX7-x1-ute"/>
+                        <barButtonItem key="rightBarButtonItem" title="등록" id="XX7-x1-ute">
+                            <connections>
+                                <action selector="tapConfirmButton:" destination="ksc-eX-jxH" id="sMS-Zq-4iY"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="confirmButton" destination="XX7-x1-ute" id="1b9-Z7-dK3"/>
+                        <outlet property="contentsTextView" destination="31m-MT-a3x" id="uyu-Dy-XZd"/>
+                        <outlet property="dateTextField" destination="qn9-Ua-BEe" id="2zL-a1-he3"/>
+                        <outlet property="titleTextField" destination="BUd-IQ-P7L" id="NDe-23-7p4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rWj-tC-bxg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -201,7 +218,7 @@
         <scene sceneID="agy-aM-FnP">
             <objects>
                 <navigationController id="bdL-oA-G0C" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="즐겨찾기" landscapeImage="star" catalog="system" selectedImage="star.fill" id="AGq-TR-ath"/>
+                    <tabBarItem key="tabBarItem" title="즐겨찾기" image="star" catalog="system" selectedImage="star.fill" id="AGq-TR-ath"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="v80-FB-L0v">
                         <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
