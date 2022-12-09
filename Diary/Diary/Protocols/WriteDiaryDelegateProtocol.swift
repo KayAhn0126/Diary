@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol WriteDiaryDelegateProtocol: AnyObject {
+    func didSelectRegister(diary: Diary)
+}
