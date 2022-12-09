@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct Diary: Hashable {
+    var titile: String
+    var contents: String
+    var date: Date
+    var isStar: Bool 
+}
