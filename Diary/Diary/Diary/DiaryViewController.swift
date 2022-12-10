@@ -50,6 +50,10 @@ class DiaryViewController: UIViewController {
         if let data = userDefaults.value(forKey: "diary") as? Data {
             let realData = try? PropertyListDecoder().decode([Diary].self, from: data)
             self.diaryList = realData!
+            self.diaryList = self.diaryList.sorted(by: {
+                $0.date > $1.date
+                // $0.date.compare($1.date) == .orderedDescending   이렇게도 작성할 수 있다.
+            })
         }
     }
     
