@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Diary: Hashable {
+struct Diary: Hashable, Codable {
     var titile: String
     var contents: String
     var date: Date

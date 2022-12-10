@@ -15,16 +15,41 @@ class DiaryViewController: UIViewController {
     typealias Item = Diary
     @IBOutlet weak var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
-    private var diaryList = [Diary]()
+    private var diaryList = [Diary]() {
+        didSet {
+            saveDiaryList()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDataSource()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.loadDiaryList()
+        self.applySnapshot()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let wrietDiaryViewController = segue.destination as? WriteDiaryViewController {
             wrietDiaryViewController.delegate = self
+        }
+    }
+    
+    private func saveDiaryList() {
+        let data = self.diaryList.map {
+            return Diary(titile: $0.titile, contents: $0.contents, date: $0.date, isStar: $0.isStar)
+        }
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(try? PropertyListEncoder().encode(data), forKey: "diary")
+    }
+    
+    private func loadDiaryList() {
+        let userDefaults = UserDefaults.standard
+        if let data = userDefaults.value(forKey: "diary") as? Data {
+            let realData = try? PropertyListDecoder().decode([Diary].self, from: data)
+            self.diaryList = realData!
         }
     }
     
@@ -54,14 +79,18 @@ class DiaryViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
+    
+    private func applySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(diaryList, toSection: .main)
+        dataSource.apply(snapshot)
+    }
 }
 
 extension DiaryViewController: WriteDiaryDelegateProtocol {
     func didSelectRegister(diary: Diary) {
         self.diaryList.append(diary)
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(diaryList, toSection: .main)
-        dataSource.apply(snapshot)
+        self.applySnapshot()
     }
 }
