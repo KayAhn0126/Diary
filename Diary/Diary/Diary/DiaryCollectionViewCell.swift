@@ -18,9 +18,6 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         self.layer.borderWidth = 1.0
         self.layer.cornerRadius = 3.0
         titleLabel.text = diary.titile
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yy년 MM월 dd일(EEEEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
-        dateLabel.text = formatter.string(from: diary.date)
+        dateLabel.text = DiaryFormat.shared.swapToDiaryFormat(date: diary.date, isSimplify: true)
     }
 }
