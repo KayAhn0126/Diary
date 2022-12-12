@@ -10,9 +10,15 @@ import Foundation
 final class DiaryFormat {
     static let shared = DiaryFormat()
     
-    private func swapToDiaryFormat(date: Date) -> String {
+    private init() { }
+    
+    func swapToDiaryFormat(date: Date, isSimplify: Bool = false) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yy년 MM월 dd일(EEEEE)"
+        if isSimplify {
+            formatter.dateFormat = "yy년 MM월 dd일(EEEEE)"
+        } else {
+            formatter.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
+        }
         formatter.locale = Locale(identifier: "ko_KR")
         return formatter.string(from: date)
     }
