@@ -7,12 +7,8 @@
 
 import Foundation
 
-final class DiaryFormat {
-    static let shared = DiaryFormat()
-    
-    private init() { }
-    
-    func swapToDiaryFormat(date: Date, isSimplify: Bool = false) -> String {
+struct DiaryFormat {
+    static func swapToDiaryFormat(date: Date, isSimplify: Bool = false) -> String {
         let formatter = DateFormatter()
         if isSimplify {
             formatter.dateFormat = "yy년 MM월 dd일(EEEEE)"
