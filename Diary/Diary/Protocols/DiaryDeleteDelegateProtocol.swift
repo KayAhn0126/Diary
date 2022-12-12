@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol DiaryDeleteDelegateProtocol: AnyObject {
+    func didSelectDelete(cellLocation: IndexPath)
+}

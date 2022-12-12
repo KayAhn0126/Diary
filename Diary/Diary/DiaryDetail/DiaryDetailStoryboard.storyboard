@@ -73,6 +73,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="수정"/>
+                                        <connections>
+                                            <action selector="tapEditButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Jyc-IC-l2U"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nss-Cu-fJE">
                                         <rect key="frame" x="80" y="0.0" width="30" height="30"/>
@@ -80,6 +83,9 @@
                                         <state key="normal" title="삭제">
                                             <color key="titleColor" systemColor="systemRedColor"/>
                                         </state>
+                                        <connections>
+                                            <action selector="tapDeleteButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="SM7-hJ-rZs"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -103,6 +109,11 @@
                             <constraint firstItem="G6V-92-VZ3" firstAttribute="top" secondItem="KXE-IT-HmA" secondAttribute="bottom" constant="24" id="ue0-cH-LY5"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentsTextView" destination="ViF-P1-rhW" id="scM-fi-U0f"/>
+                        <outlet property="dateLabel" destination="ZZQ-IV-9y3" id="8hv-dX-v8Q"/>
+                        <outlet property="titleLabel" destination="hZS-td-ETH" id="6S2-Hr-3r8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

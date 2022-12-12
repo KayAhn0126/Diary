@@ -23,6 +23,7 @@ class DiaryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.delegate = self
         configureDataSource()
     }
     
@@ -95,6 +96,25 @@ class DiaryViewController: UIViewController {
 extension DiaryViewController: WriteDiaryDelegateProtocol {
     func didSelectRegister(diary: Diary) {
         self.diaryList.append(diary)
+        self.applySnapshot()
+    }
+}
+
+
+extension DiaryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
+        guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
+        DiaryDetailViewController.diary = diaryList[indexPath.row]
+        DiaryDetailViewController.indexPath = indexPath
+        DiaryDetailViewController.delegate = self
+        self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
+    }
+}
+
+extension DiaryViewController: DiaryDeleteDelegateProtocol {
+    func didSelectDelete(cellLocation: IndexPath) {
+        self.diaryList.remove(at: cellLocation.row)
         self.applySnapshot()
     }
 }
