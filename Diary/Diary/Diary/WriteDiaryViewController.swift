@@ -42,9 +42,7 @@ class WriteDiaryViewController: UIViewController {
     
     private func configureContentsTextView() {
         let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
-        self.contentsTextView.layer.borderColor = borderColor.cgColor
-        self.contentsTextView.layer.borderWidth = 0.5
-        self.contentsTextView.layer.cornerRadius = 5.0
+        self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
     private func configureDatePicker() {
