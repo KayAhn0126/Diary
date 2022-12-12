@@ -42,9 +42,7 @@ class WriteDiaryViewController: UIViewController {
     
     private func configureContentsTextView() {
         let borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
-        self.contentsTextView.layer.borderColor = borderColor.cgColor
-        self.contentsTextView.layer.borderWidth = 0.5
-        self.contentsTextView.layer.cornerRadius = 5.0
+        self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
     private func configureDatePicker() {
@@ -53,12 +51,8 @@ class WriteDiaryViewController: UIViewController {
         self.datePicker.addTarget(self, action: #selector(datePickerValueDidChange(_:)), for: .valueChanged)
         self.datePicker.locale = Locale(identifier: "ko_KR")
         self.dateTextField.inputView = self.datePicker
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
         self.diaryDate = datePicker.date
-        self.dateTextField.text = formatter.string(from: self.diaryDate!)
+        self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
     }
     
     @IBAction func tapConfirmButton(_ sender: UIBarButtonItem) {
@@ -71,11 +65,8 @@ class WriteDiaryViewController: UIViewController {
     }
     
     @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일(EEEEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
         self.diaryDate = datePicker.date
-        self.dateTextField.text = formatter.string(from: self.diaryDate!)
+        self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
         self.dateTextField.sendActions(for: .editingChanged)
     }
     
