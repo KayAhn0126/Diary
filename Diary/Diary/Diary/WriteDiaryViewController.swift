@@ -54,7 +54,7 @@ class WriteDiaryViewController: UIViewController {
         self.datePicker.locale = Locale(identifier: "ko_KR")
         self.dateTextField.inputView = self.datePicker
         self.diaryDate = datePicker.date
-        self.dateTextField.text = DiaryFormat.shared.swapToDiaryFormat(date: self.diaryDate!)
+        self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
     }
     
     @IBAction func tapConfirmButton(_ sender: UIBarButtonItem) {
@@ -68,7 +68,7 @@ class WriteDiaryViewController: UIViewController {
     
     @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
         self.diaryDate = datePicker.date
-        self.dateTextField.text = DiaryFormat.shared.swapToDiaryFormat(date: self.diaryDate!)
+        self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
         self.dateTextField.sendActions(for: .editingChanged)
     }
     

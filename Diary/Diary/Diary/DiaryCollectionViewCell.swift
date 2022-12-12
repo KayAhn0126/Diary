@@ -18,6 +18,6 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         self.layer.borderWidth = 1.0
         self.layer.cornerRadius = 3.0
         titleLabel.text = diary.titile
-        dateLabel.text = DiaryFormat.shared.swapToDiaryFormat(date: diary.date, isSimplify: true)
+        dateLabel.text = DiaryFormat.swapToDiaryFormat(date: diary.date, isSimplify: true)
     }
 }
