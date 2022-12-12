@@ -26,15 +26,11 @@ final class DiaryDetailViewController: UIViewController {
     private func configureDetailView() {
         guard let title = diary?.titile else { return }
         guard let contents = diary?.contents else { return }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yy년 MM월 dd일(EEEEE)"
-        formatter.locale = Locale(identifier: "ko_KR")
         guard let date = diary?.date else { return }
         
         titleLabel.text = title
         contentsTextView.text = contents
-        dateLabel.text = formatter.string(from: date)
+        dateLabel.text = DiaryFormat.swapToDiaryFormat(date: date)
     }
     
     @IBAction func tapEditButton(_ sender: UIButton) {
