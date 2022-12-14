@@ -17,13 +17,25 @@ class WriteDiaryViewController: UIViewController {
     private let datePicker = UIDatePicker()
     private var diaryDate: Date?
     weak var delegate: WriteDiaryDelegateProtocol?
+    var diaryEditMode: DiaryMode = .new
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureContentsTextView()
         self.configureDatePicker()
         self.configureInputField()
+        self.configureEditMode()
         self.confirmButton.isEnabled = false
+    }
+    
+    private func configureEditMode() {
+        if case let .edit(_, diary) = self.diaryEditMode {
+            self.titleTextField.text = diary.titile
+            self.contentsTextView.text = diary.contents
+            self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: diary.date)
+            self.diaryDate = diary.date
+            self.confirmButton.title = "수정"
+        }
     }
     
     private func configureInputField() {
@@ -60,7 +72,17 @@ class WriteDiaryViewController: UIViewController {
         guard let content = contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
         let diary = Diary(titile: title, contents: content, date: date, isStar: false)
-        self.delegate?.didSelectRegister(diary: diary)
+        switch self.diaryEditMode {
+        case .new :
+            self.delegate?.didSelectRegister(diary: diary)
+        case let .edit(indexPath: indexPath, diary: _) :
+            NotificationCenter.default.post(name: NSNotification.Name("editDiary"),
+                                            object: diary,
+                                            userInfo: [
+                                                "indexPath.row" : indexPath.row
+                                            ]
+            )
+        }
         self.navigationController?.popViewController(animated: true)
     }
     

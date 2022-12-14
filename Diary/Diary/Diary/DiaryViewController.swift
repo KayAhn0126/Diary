@@ -25,6 +25,7 @@ class DiaryViewController: UIViewController {
         super.viewDidLoad()
         collectionView.delegate = self
         configureDataSource()
+        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +92,16 @@ class DiaryViewController: UIViewController {
         snapshot.appendItems(diaryList, toSection: .main)
         dataSource.apply(snapshot)
     }
+    
+    @objc func editDiaryNotification(_ notification: Notification) {
+        guard let diary = notification.object as? Diary else { return }
+        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
+        self.diaryList[row] = diary
+        self.diaryList = self.diaryList.sorted {
+            $0.date > $1.date
+        }
+        self.applySnapshot()
+    }
 }
 
 extension DiaryViewController: WriteDiaryDelegateProtocol {
@@ -118,3 +129,4 @@ extension DiaryViewController: DiaryDeleteDelegateProtocol {
         self.applySnapshot()
     }
 }
+
