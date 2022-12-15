@@ -33,12 +33,14 @@ class DiaryViewController: UIViewController {
         self.applySnapshot()
     }
     
+    // MARK: - segue로 show(navigation)하기전 실행되는 메서드
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let wrietDiaryViewController = segue.destination as? WriteDiaryViewController {
             wrietDiaryViewController.delegate = self
         }
     }
     
+    // MARK: - 현재 DiaryList를 userDefaults에 저장하는 메서드
     private func saveDiaryList() {
         let data = self.diaryList.map {
             return Diary(titile: $0.titile, contents: $0.contents, date: $0.date, isStar: $0.isStar)
@@ -47,6 +49,7 @@ class DiaryViewController: UIViewController {
         userDefaults.set(try? PropertyListEncoder().encode(data), forKey: "diary")
     }
     
+    // MARK: - userDefaults에서 DiaryList를 가져오는 메서드
     private func loadDiaryList() {
         let userDefaults = UserDefaults.standard
         if let data = userDefaults.value(forKey: "diary") as? Data {
@@ -93,6 +96,7 @@ class DiaryViewController: UIViewController {
         dataSource.apply(snapshot)
     }
     
+    // MARK: - Notification.Name("editDiary")으로 노티가 왔을 때 실행되는 메서드
     @objc func editDiaryNotification(_ notification: Notification) {
         guard let diary = notification.object as? Diary else { return }
         guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
@@ -104,6 +108,7 @@ class DiaryViewController: UIViewController {
     }
 }
 
+// MARK: - WriteDiaryDelegateProtocol 타입의 delegate가 실행할 메서드 정의
 extension DiaryViewController: WriteDiaryDelegateProtocol {
     func didSelectRegister(diary: Diary) {
         self.diaryList.append(diary)
@@ -111,7 +116,7 @@ extension DiaryViewController: WriteDiaryDelegateProtocol {
     }
 }
 
-
+// MARK: - cell이 클릭되었을 때 실행될 메서드 정의
 extension DiaryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
@@ -123,6 +128,7 @@ extension DiaryViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - DiaryDeleteDelegateProtocol 타입의 delegate가 실행할 메서드
 extension DiaryViewController: DiaryDeleteDelegateProtocol {
     func didSelectDelete(cellLocation: IndexPath) {
         self.diaryList.remove(at: cellLocation.row)

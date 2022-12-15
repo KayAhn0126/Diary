@@ -17,7 +17,7 @@ class WriteDiaryViewController: UIViewController {
     private let datePicker = UIDatePicker()
     private var diaryDate: Date?
     weak var delegate: WriteDiaryDelegateProtocol?
-    var diaryEditMode: DiaryMode = .new
+    var diaryMode: DiaryMode = .new
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +28,9 @@ class WriteDiaryViewController: UIViewController {
         self.confirmButton.isEnabled = false
     }
     
+    // MARK: - 수정 버튼을 통해 WriteDiaryViewController에 진입했을 때 설정 모드로 보이기 위해 설정하는 메서드
     private func configureEditMode() {
-        if case let .edit(_, diary) = self.diaryEditMode {
+        if case let .edit(_, diary) = self.diaryMode {
             self.titleTextField.text = diary.titile
             self.contentsTextView.text = diary.contents
             self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: diary.date)
@@ -38,6 +39,7 @@ class WriteDiaryViewController: UIViewController {
         }
     }
     
+    // MARK: - 각 입력창이 특정 이벤트를 발생시킬때 실행될 메서드를 연결하는 메서드
     private func configureInputField() {
         self.contentsTextView.delegate = self
         self.titleTextField.addTarget(self, action: #selector(titleTextFieldDidChange(_:)), for: .editingChanged)
@@ -57,6 +59,7 @@ class WriteDiaryViewController: UIViewController {
         self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
+    // MARK: - DatePicker 구성 메서드 정의
     private func configureDatePicker() {
         self.datePicker.datePickerMode = .date
         self.datePicker.preferredDatePickerStyle = .wheels
@@ -67,12 +70,13 @@ class WriteDiaryViewController: UIViewController {
         self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
     }
     
+    // MARK: - 등록 버튼이 눌렸을 때 diaryMode에 따라 달리 실행되는 메서드 정의
     @IBAction func tapConfirmButton(_ sender: UIBarButtonItem) {
         guard let title = titleTextField.text else { return }
         guard let content = contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
         let diary = Diary(titile: title, contents: content, date: date, isStar: false)
-        switch self.diaryEditMode {
+        switch self.diaryMode {
         case .new :
             self.delegate?.didSelectRegister(diary: diary)
         case let .edit(indexPath: indexPath, diary: _) :
@@ -86,21 +90,25 @@ class WriteDiaryViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - datePicker는 변경될 때 valueChanged 이벤트를 발생, dateTextField는 valueChanged를 감지하지 못하니 editingChanged 이벤트를 전송
     @objc private func datePickerValueDidChange(_ datePicker: UIDatePicker) {
         self.diaryDate = datePicker.date
         self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: self.diaryDate!)
         self.dateTextField.sendActions(for: .editingChanged)
     }
     
+    // MARK: - 화면의 다른곳을 클릭하면 실행되는 메서드
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
+    // MARK: - 메서드 내 조건을 통해 '등록' 버튼 활성화 여부를 판단하는 메서드
     private func validateInputField() {
         self.confirmButton.isEnabled = !(self.titleTextField.text?.isEmpty ?? true) && !(self.dateTextField.text?.isEmpty ?? true) && !self.contentsTextView.text.isEmpty
     }
 }
 
+// MARK: - textView 클래스는 UIControl 클래스를 상속하지 않기 때문에 아래와 같이 textViewDidChange로 감지하는 메서드 구현
 extension WriteDiaryViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         self.validateInputField()

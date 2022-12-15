@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - 등록 버튼 눌렀을때 두 VC간 연결을 도와줄 프로토콜
 protocol WriteDiaryDelegateProtocol: AnyObject {
     func didSelectRegister(diary: Diary)
 }

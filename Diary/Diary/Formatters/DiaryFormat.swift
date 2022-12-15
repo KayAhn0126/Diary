@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - 기본 화면의 양식과 작성 화면의 양식 세분화 -> 마지막 파라미터의 값으로 판단
 struct DiaryFormat {
     static func swapToDiaryFormat(date: Date, isSimplify: Bool = false) -> String {
         let formatter = DateFormatter()
