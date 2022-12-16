@@ -32,8 +32,8 @@
             <objects>
                 <navigationController id="Uu5-x8-Hje" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="일기장" image="folder" catalog="system" selectedImage="folder.fill" id="drm-mT-Bmx"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VlY-qI-g6h">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="VlY-qI-g6h">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -44,7 +44,7 @@
             </objects>
             <point key="canvasLocation" x="-1657" y="-141"/>
         </scene>
-        <!--Diary View Controller-->
+        <!--목록-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="DiaryViewController" customModule="Diary" customModuleProvider="target" sceneMemberID="viewController">
@@ -110,7 +110,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="21R-OB-87k" secondAttribute="bottom" id="zaJ-xS-mrd"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="2Ua-PH-SVt">
+                    <navigationItem key="navigationItem" title="목록" id="2Ua-PH-SVt">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="6pz-Hd-cLx">
                             <connections>
                                 <segue destination="ksc-eX-jxH" kind="show" id="wiy-e0-vjU"/>
@@ -134,24 +134,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제목" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovU-wz-ogt">
-                                <rect key="frame" x="24" y="112" width="366" height="21"/>
+                                <rect key="frame" x="24" y="164" width="366" height="21"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BUd-IQ-P7L">
-                                <rect key="frame" x="24" y="145" width="366" height="34"/>
+                                <rect key="frame" x="24" y="197" width="366" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="내용" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CYg-7A-BbM">
-                                <rect key="frame" x="24" y="203" width="366" height="21"/>
+                                <rect key="frame" x="24" y="255" width="366" height="21"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="31m-MT-a3x">
-                                <rect key="frame" x="24" y="236" width="366" height="100"/>
+                                <rect key="frame" x="24" y="288" width="366" height="100"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="JmP-Qa-0zO"/>
@@ -161,13 +161,13 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4do-EZ-mGU">
-                                <rect key="frame" x="24" y="360" width="366" height="21"/>
+                                <rect key="frame" x="24" y="412" width="366" height="21"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qn9-Ua-BEe">
-                                <rect key="frame" x="24" y="393" width="366" height="34"/>
+                                <rect key="frame" x="24" y="445" width="366" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
