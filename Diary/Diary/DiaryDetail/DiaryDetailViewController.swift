@@ -32,10 +32,10 @@ final class DiaryDetailViewController: UIViewController {
         contentsTextView.text = contents
         dateLabel.text = DiaryFormat.swapToDiaryFormat(date: date)
         
-        let borderColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
-        self.titleLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.1, cornerRadius: 3.0)
-        self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.1, cornerRadius: 3.0)
-        self.dateLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.1, cornerRadius: 3.0)
+        let borderColor = UIColor(named: "LDColor")!
+        self.titleLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.dateLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
     // MARK: - 노티가 오면 실행되는 메서드
