@@ -22,7 +22,7 @@ class WriteDiaryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dateTextField.delegate = self
-        self.configureContentsTextView()
+        self.configureBorderStyle()
         self.configureDatePicker()
         self.configureInputField()
         self.configureEditMode()
@@ -55,9 +55,11 @@ class WriteDiaryViewController: UIViewController {
         self.validateInputField()
     }
     
-    private func configureContentsTextView() {
+    private func configureBorderStyle() {
         let borderColor = UIColor(named: "LDColor")!
         self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.titleTextField.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.dateTextField.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
     // MARK: - DatePicker 구성 메서드 정의
