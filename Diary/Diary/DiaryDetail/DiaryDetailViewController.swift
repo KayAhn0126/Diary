@@ -24,7 +24,7 @@ final class DiaryDetailViewController: UIViewController {
     }
     
     private func configureDetailView() {
-        guard let title = diary?.titile else { return }
+        guard let title = diary?.title else { return }
         guard let contents = diary?.contents else { return }
         guard let date = diary?.date else { return }
         

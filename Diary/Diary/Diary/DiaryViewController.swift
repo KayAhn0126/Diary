@@ -43,7 +43,7 @@ class DiaryViewController: UIViewController {
     // MARK: - 현재 DiaryList를 userDefaults에 저장하는 메서드
     private func saveDiaryList() {
         let data = self.diaryList.map {
-            return Diary(titile: $0.titile, contents: $0.contents, date: $0.date, isStar: $0.isStar)
+            return Diary(title: $0.title, contents: $0.contents, date: $0.date, isStar: $0.isStar)
         }
         let userDefaults = UserDefaults.standard
         userDefaults.set(try? PropertyListEncoder().encode(data), forKey: "diary")

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Diary 구조체 Hashable -> DiffableDataSource Item, Codable -> UserDefaults 객체 직렬화
 struct Diary: Hashable, Codable {
-    var titile: String
+    var title: String
     var contents: String
     var date: Date
     var isStar: Bool 

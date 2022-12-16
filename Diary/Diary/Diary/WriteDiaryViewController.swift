@@ -31,7 +31,7 @@ class WriteDiaryViewController: UIViewController {
     // MARK: - 수정 버튼을 통해 WriteDiaryViewController에 진입했을 때 설정 모드로 보이기 위해 설정하는 메서드
     private func configureEditMode() {
         if case let .edit(_, diary) = self.diaryMode {
-            self.titleTextField.text = diary.titile
+            self.titleTextField.text = diary.title
             self.contentsTextView.text = diary.contents
             self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: diary.date)
             self.diaryDate = diary.date
@@ -75,7 +75,7 @@ class WriteDiaryViewController: UIViewController {
         guard let title = titleTextField.text else { return }
         guard let content = contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
-        let diary = Diary(titile: title, contents: content, date: date, isStar: false)
+        let diary = Diary(title: title, contents: content, date: date, isStar: false)
         switch self.diaryMode {
         case .new :
             self.delegate?.didSelectRegister(diary: diary)
