@@ -35,8 +35,9 @@ class DiaryViewController: UIViewController {
     
     // MARK: - segue로 show(navigation)하기전 실행되는 메서드
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let wrietDiaryViewController = segue.destination as? WriteDiaryViewController {
-            wrietDiaryViewController.delegate = self
+        if let writeDiaryViewController = segue.destination as? WriteDiaryViewController {
+            writeDiaryViewController.delegate = self
+            writeDiaryViewController.navigationItem.title = "일기 작성"
         }
     }
     
@@ -124,6 +125,7 @@ extension DiaryViewController: UICollectionViewDelegate {
         DiaryDetailViewController.diary = diaryList[indexPath.row]
         DiaryDetailViewController.indexPath = indexPath
         DiaryDetailViewController.delegate = self
+        DiaryDetailViewController.navigationItem.title = diaryList[indexPath.row].title
         self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
     }
 }

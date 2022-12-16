@@ -52,6 +52,7 @@ final class DiaryDetailViewController: UIViewController {
         guard let indexPath = self.indexPath else { return }
         guard let diary = self.diary else { return }
         writeDiaryViewController.diaryMode = .edit(indexPath: indexPath, diary: diary)
+        writeDiaryViewController.navigationItem.title = "일기 수정"
         NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
         self.navigationController?.pushViewController(writeDiaryViewController, animated: true)
     }
