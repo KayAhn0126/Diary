@@ -9,9 +9,10 @@ import UIKit
 
 final class DiaryDetailViewController: UIViewController {
     
-    @IBOutlet weak var titleLabel: UILabel!
+    
+    @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var dateTextField: UITextField!
     
     var diary: Diary?
     var indexPath: IndexPath?
@@ -28,14 +29,14 @@ final class DiaryDetailViewController: UIViewController {
         guard let contents = diary?.contents else { return }
         guard let date = diary?.date else { return }
         
-        titleLabel.text = title
+        titleTextField.text = title
         contentsTextView.text = contents
-        dateLabel.text = DiaryFormat.swapToDiaryFormat(date: date)
+        dateTextField.text = DiaryFormat.swapToDiaryFormat(date: date)
         
         let borderColor = UIColor(named: "LDColor")!
-        self.titleLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.titleTextField.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
         self.contentsTextView.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
-        self.dateLabel.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
+        self.dateTextField.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
     }
     
     // MARK: - 노티가 오면 실행되는 메서드
