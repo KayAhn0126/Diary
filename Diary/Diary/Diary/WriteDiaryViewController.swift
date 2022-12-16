@@ -21,6 +21,7 @@ class WriteDiaryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dateTextField.delegate = self
         self.configureContentsTextView()
         self.configureDatePicker()
         self.configureInputField()
@@ -112,5 +113,11 @@ class WriteDiaryViewController: UIViewController {
 extension WriteDiaryViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         self.validateInputField()
+    }
+}
+
+extension WriteDiaryViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
     }
 }
