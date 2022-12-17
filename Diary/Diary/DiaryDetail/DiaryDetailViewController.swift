@@ -13,11 +13,13 @@ final class DiaryDetailViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var dateTextField: UITextField!
+    var starButton: UIBarButtonItem?
     
     var diary: Diary?
     var indexPath: IndexPath?
     
-    weak var delegate: DiaryDeleteDelegateProtocol?
+    weak var deleteDelegate: DiaryDeleteDelegateProtocol?
+    weak var starDelegate: DiaryStarDelegateProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +27,15 @@ final class DiaryDetailViewController: UIViewController {
     }
     
     private func configureDetailView() {
-        guard let title = diary?.title else { return }
-        guard let contents = diary?.contents else { return }
-        guard let date = diary?.date else { return }
+        guard let diary = self.diary else { return }
         
-        titleTextField.text = title
-        contentsTextView.text = contents
-        dateTextField.text = DiaryFormat.swapToDiaryFormat(date: date)
+        self.titleTextField.text = diary.title
+        self.contentsTextView.text = diary.contents
+        self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: diary.date)
+        self.starButton = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(tapStarButton))
+        self.starButton?.image = diary.isStar ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
+        self.starButton?.tintColor = .orange
+        self.navigationItem.rightBarButtonItem = self.starButton
         
         let borderColor = UIColor(named: "LDColor")!
         self.titleTextField.layer.settingBorderWithOptions(color: borderColor, width: 0.5, cornerRadius: 5.0)
@@ -60,8 +64,21 @@ final class DiaryDetailViewController: UIViewController {
     
     // MARK: - 삭제 버튼 클릭시 실행되는 메서드
     @IBAction func tapDeleteButton(_ sender: UIButton) {
-        self.delegate?.didSelectDelete(cellLocation: indexPath!)
+        self.deleteDelegate?.didSelectDelete(cellLocation: indexPath!)
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: - star(즐겨찾기) 버튼이 눌렸을 때 실행되는 메서드
+    @objc func tapStarButton() {
+        guard let isStar = self.diary?.isStar else { return }
+        guard let indexPath = self.indexPath else { return }
+        if isStar {
+            self.starButton?.image = UIImage(systemName: "star")
+        } else {
+            self.starButton?.image = UIImage(systemName: "star.fill")
+        }
+        self.diary?.isStar = !isStar
+        self.starDelegate?.didSelectStar(cellLocation: indexPath, isStar: !isStar)
     }
     
     deinit {

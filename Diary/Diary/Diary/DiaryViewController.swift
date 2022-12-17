@@ -7,10 +7,6 @@
 
 import UIKit
 
-enum Section {
-    case main
-}
-
 class DiaryViewController: UIViewController {
     typealias Item = Diary
     @IBOutlet weak var collectionView: UICollectionView!
@@ -124,17 +120,25 @@ extension DiaryViewController: UICollectionViewDelegate {
         guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
         DiaryDetailViewController.diary = diaryList[indexPath.row]
         DiaryDetailViewController.indexPath = indexPath
-        DiaryDetailViewController.delegate = self
+        DiaryDetailViewController.deleteDelegate = self
+        DiaryDetailViewController.starDelegate = self
         DiaryDetailViewController.navigationItem.title = diaryList[indexPath.row].title
         self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
     }
 }
 
-// MARK: - DiaryDeleteDelegateProtocol 타입의 delegate가 실행할 메서드
+// MARK: - DiaryDeleteDelegateProtocol 타입의 delegate가 실행할 메서드 정의
 extension DiaryViewController: DiaryDeleteDelegateProtocol {
     func didSelectDelete(cellLocation: IndexPath) {
         self.diaryList.remove(at: cellLocation.row)
         self.applySnapshot()
+    }
+}
+
+// MARK: - DiaryStarDelegateProtocol 타입의 delegate가 실행할 메서드 정의
+extension DiaryViewController: DiaryStarDelegateProtocol {
+    func didSelectStar(cellLocation: IndexPath, isStar: Bool) {
+        self.diaryList[cellLocation.row].isStar = isStar
     }
 }
 
