@@ -7,10 +7,6 @@
 
 import UIKit
 
-enum Section {
-    case main
-}
-
 class DiaryViewController: UIViewController {
     typealias Item = Diary
     @IBOutlet weak var collectionView: UICollectionView!
