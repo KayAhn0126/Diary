@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol DiaryStarDelegateProtocol: AnyObject {
+    func didSelectStar(cellLocation: IndexPath, isStar: Bool)
+}
