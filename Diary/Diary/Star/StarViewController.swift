@@ -20,6 +20,10 @@ class StarViewController: UIViewController {
         super.viewDidLoad()
         collectionView.delegate = self
         self.configureDataSource()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: NSNotification.Name("editDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: NSNotification.Name("starDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteDiaryNotification(_:)), name: NSNotification.Name("deleteDiary"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -27,6 +31,7 @@ class StarViewController: UIViewController {
         self.loadStarDiaryList()
     }
     
+    // MARK: - userDefaults에서 값을 불러오는 메서드
     private func loadStarDiaryList() {
         let userDefaults = UserDefaults.standard
         if let data = userDefaults.value(forKey: "diary") as? Data {
@@ -40,6 +45,55 @@ class StarViewController: UIViewController {
     }
     
     
+    @objc func editDiaryNotification(_ notification: Notification) {
+        guard let diary = notification.object as? Diary else { return }
+        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
+        self.diaryList[row] = diary
+        self.diaryList = self.diaryList.sorted(by: {
+            $0.date > $1.date
+        })
+    }
+    
+    // MARK: - 즐겨찾기 버튼이 눌렸을때 반응하는 메서드
+    @objc func starDiaryNotification(_ notification: Notification) {
+        guard let starDiary = notification.object as? [String : Any] else { return }
+        guard let diary = starDiary["diary"] as? Diary else { return }
+        guard let isStar = starDiary["isStar"] as? Bool else { return }
+        guard let indexPath = starDiary["indexPath"] as? IndexPath else { return }
+        if isStar {
+            self.diaryList.append(diary)
+            self.diaryList = self.diaryList.sorted(by: {
+                $0.date > $1.date
+            })
+        } else {
+            self.diaryList.remove(at: indexPath.row)
+            self.collectionView.deleteItems(at: [indexPath])
+        }
+    }
+    
+    @objc func deleteDiaryNotification(_ notification: Notification) {
+        guard let indexPath = notification.object as? IndexPath else { return }
+        self.diaryList.remove(at: indexPath.row)
+    }
+}
+
+// MARK: - 즐겨찾기에서 셀이 클릭 되었을때 실행되는 메서드
+extension StarViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
+        guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
+        let diary = diaryList[indexPath.row]
+        DiaryDetailViewController.diary = diary
+        DiaryDetailViewController.indexPath = indexPath
+        DiaryDetailViewController.navigationItem.title = diary.title
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .automatic
+        self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
+    }
+}
+
+// MARK: - collectionView 관련 메서드
+extension StarViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StarCollectionViewCell", for: indexPath) as? StarCollectionViewCell else {
@@ -72,19 +126,5 @@ class StarViewController: UIViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(diaryList, toSection: .main)
         dataSource.apply(snapshot)
-    }
-}
-
-extension StarViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
-        guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
-        let diary = diaryList[indexPath.row]
-        DiaryDetailViewController.diary = diary
-        DiaryDetailViewController.indexPath = indexPath
-        DiaryDetailViewController.navigationItem.title = diary.title
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .automatic
-        self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
     }
 }
