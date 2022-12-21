@@ -67,7 +67,6 @@ class StarViewController: UIViewController {
             })
         } else {
             self.diaryList.remove(at: indexPath.row)
-            self.collectionView.deleteItems(at: [indexPath])
         }
     }
     
