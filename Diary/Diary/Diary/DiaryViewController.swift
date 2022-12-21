@@ -22,6 +22,8 @@ class DiaryViewController: UIViewController {
         collectionView.delegate = self
         configureDataSource()
         NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name("starDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteDiaryNotification(_:)), name: Notification.Name("deleteDiary"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +61,51 @@ class DiaryViewController: UIViewController {
         }
     }
     
+    // MARK: - Notification.Name("editDiary")으로 노티가 왔을 때 실행되는 메서드
+    @objc func editDiaryNotification(_ notification: Notification) {
+        guard let diary = notification.object as? Diary else { return }
+        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
+        self.diaryList[row] = diary
+        self.diaryList = self.diaryList.sorted {
+            $0.date > $1.date
+        }
+    }
+    
+    @objc func starDiaryNotification(_ notification: Notification) {
+        guard let info = notification.object as? [String : Any] else { return }
+        guard let indexPath = info["indexPath"] as? IndexPath else { return }
+        guard let isStar = info["isStar"] as? Bool else { return }
+        self.diaryList[indexPath.row].isStar = isStar
+    }
+    
+    @objc func deleteDiaryNotification(_ notification: Notification) {
+        guard let indexPath = notification.object as? IndexPath else { return }
+        self.diaryList.remove(at: indexPath.row)
+    }
+}
+
+// MARK: - WriteDiaryDelegateProtocol 타입의 delegate가 실행할 메서드 정의
+extension DiaryViewController: WriteDiaryDelegateProtocol {
+    func didSelectRegister(diary: Diary) {
+        self.diaryList.append(diary)
+        self.applySnapshot()
+    }
+}
+
+// MARK: - cell이 클릭되었을 때 실행될 메서드 정의
+extension DiaryViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
+        guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
+        DiaryDetailViewController.diary = diaryList[indexPath.row]
+        DiaryDetailViewController.indexPath = indexPath
+        DiaryDetailViewController.navigationItem.title = diaryList[indexPath.row].title
+        self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
+    }
+}
+
+// MARK: - collectionView 관련 메서드
+extension DiaryViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiaryCollectionViewCell", for: indexPath) as? DiaryCollectionViewCell else {
@@ -92,53 +139,4 @@ class DiaryViewController: UIViewController {
         snapshot.appendItems(diaryList, toSection: .main)
         dataSource.apply(snapshot)
     }
-    
-    // MARK: - Notification.Name("editDiary")으로 노티가 왔을 때 실행되는 메서드
-    @objc func editDiaryNotification(_ notification: Notification) {
-        guard let diary = notification.object as? Diary else { return }
-        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
-        self.diaryList[row] = diary
-        self.diaryList = self.diaryList.sorted {
-            $0.date > $1.date
-        }
-        self.applySnapshot()
-    }
 }
-
-// MARK: - WriteDiaryDelegateProtocol 타입의 delegate가 실행할 메서드 정의
-extension DiaryViewController: WriteDiaryDelegateProtocol {
-    func didSelectRegister(diary: Diary) {
-        self.diaryList.append(diary)
-        self.applySnapshot()
-    }
-}
-
-// MARK: - cell이 클릭되었을 때 실행될 메서드 정의
-extension DiaryViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
-        guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
-        DiaryDetailViewController.diary = diaryList[indexPath.row]
-        DiaryDetailViewController.indexPath = indexPath
-        DiaryDetailViewController.deleteDelegate = self
-        DiaryDetailViewController.starDelegate = self
-        DiaryDetailViewController.navigationItem.title = diaryList[indexPath.row].title
-        self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
-    }
-}
-
-// MARK: - DiaryDeleteDelegateProtocol 타입의 delegate가 실행할 메서드 정의
-extension DiaryViewController: DiaryDeleteDelegateProtocol {
-    func didSelectDelete(cellLocation: IndexPath) {
-        self.diaryList.remove(at: cellLocation.row)
-        self.applySnapshot()
-    }
-}
-
-// MARK: - DiaryStarDelegateProtocol 타입의 delegate가 실행할 메서드 정의
-extension DiaryViewController: DiaryStarDelegateProtocol {
-    func didSelectStar(cellLocation: IndexPath, isStar: Bool) {
-        self.diaryList[cellLocation.row].isStar = isStar
-    }
-}
-
