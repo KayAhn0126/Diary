@@ -94,6 +94,7 @@ override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollect
 ## 🍎 required init 생성자 알아보기
 
 ## 🍎 delegate에서 notification으로 변경한 이유
+### 📖 delegate의 문제점
 - 구조: DiaryVC(목록)과 StarVC(즐겨찾기)에서 셀을 클릭하면 DetailDiaryVC가 띄워진다.
 - 기존 목록 화면에서 일기를 클릭하면 DetailDiaryViewController를 띄우게 된다. 여기에는 '삭제'버튼과 '즐겨찾기' 토글 버튼이 있는데 이 버튼을 누르면 각각의 설정 해둔 delegate의 실행 메서드가 실행된다.
 - 현재의 로직을 표로 보자면 아래와 같다. (그림이 이상한것이 아니라 삭제와 즐겨찾기 버튼이 눌렸을때 실제로 작동하는 메서드가 DiaryVC에 구현 되어있기 때문이다.
@@ -114,3 +115,15 @@ extension DiaryViewController: UICollectionViewDelegate {
 ![](https://i.imgur.com/TuGvPve.png)
 - 위와 같은 그림은 delegate pattern을 사용해서는 불가능하다는 이야기 이다.
 - DiaryVC와 StarVC에서 특정 구분자를 구독하고 삭제와 즐겨찾기 버튼이 클릭될 때마다 포스트를 하면 하나의 행동이 2명의 구독자에게 영향을 끼칠수 있다는 점을 활용했다.
+
+### 📖 Notification으로 대체 후 플로우 차트
+![](https://i.imgur.com/8rLcDys.png)
+- delegate 패턴을 사용했을 때 보다 확실히 1:N을 관리하는 측면에서는 좋아졌다.
+- NotificationCenter는 연관이 없는 곳으로 특정 이벤트나 행동을 전달 할 떄 가장 효율적이다. 지정 구분자가 post 될 때 원하는 곳에서 편하게 받을수 있다는 장점도 있지만 분명히 단점도 존재했다.
+- 이벤트에 따라 세세하게 다른 행동을 해야한다면 지정 구분자를 다르게 해서 보내야한다는 것과, 지정 구분자의 갯수가 많아지면 무엇이 어떤 행동을 하는지 분간하기 힘들 수도 있다는 생각이 들었다.
+
+## 🍎 프로젝트를 끝내고 느낀점. 
+- 1. 아직 정확하게 무엇 때문인지는 모르겠지만, combine의 파이프라인 구현이 필요하다고 느꼈다.
+- 2. DiffableDataSource를 사용 할 때, flowlayout에서 사용하는 deleteItmes와 같은 메서드를 사용하지 말자. -> snapshot과 동시에 이루어져 크래쉬 발생!
+
+
