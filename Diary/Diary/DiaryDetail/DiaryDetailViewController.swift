@@ -14,11 +14,15 @@ final class DiaryDetailViewController: UIViewController {
     var starButton: UIBarButtonItem?
     
     var diary: Diary?
-    var indexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDetailView()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let diary = self.diary else { return }
+        self.navigationItem.title = diary.title
     }
     
     private func configureDetailView() {
@@ -43,10 +47,9 @@ final class DiaryDetailViewController: UIViewController {
         let detailStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let writeDiaryViewController = detailStoryboard.instantiateViewController(identifier: "WriteDiaryViewController") as? WriteDiaryViewController else { return }
         
-        guard let indexPath = self.indexPath else { return }
         guard let diary = self.diary else { return }
         
-        writeDiaryViewController.diaryMode = .edit(indexPath: indexPath, diary: diary)
+        writeDiaryViewController.diaryMode = .edit(diary: diary)
         writeDiaryViewController.navigationItem.title = "일기 수정"
         
         NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
@@ -55,15 +58,16 @@ final class DiaryDetailViewController: UIViewController {
     
     // MARK: - 삭제 버튼 클릭시 실행되는 메서드
     @IBAction func tapDeleteButton(_ sender: UIButton) {
+        guard let uuidString = self.diary?.uuidString else { return }
         NotificationCenter.default.post(
             name: NSNotification.Name("deleteDiary"),
-            object: indexPath,
+            object: uuidString,
             userInfo: nil
         )
         self.navigationController?.popViewController(animated: true)
     }
     
-    // MARK: - 노티가 오면 실행되는 메서드
+    // MARK: - "editDiary"로 noti를 받았을때 실행되는 메서드
     @objc func editDiaryNotification(_ notification: Notification) {
         guard let diary = notification.object as? Diary else { return }
         self.diary = diary
@@ -73,7 +77,6 @@ final class DiaryDetailViewController: UIViewController {
     // MARK: - star(즐겨찾기) 버튼이 눌렸을 때 실행되는 메서드
     @objc func tapStarButton() {
         guard let isStar = self.diary?.isStar else { return }
-        guard let indexPath = self.indexPath else { return }
         
         if isStar {
             self.starButton?.image = UIImage(systemName: "star")
@@ -86,9 +89,7 @@ final class DiaryDetailViewController: UIViewController {
         NotificationCenter.default.post(
             name: NSNotification.Name("starDiary"),
             object: [
-                "diary" : self.diary,
-                "indexPath" : indexPath,
-                "isStar" : !isStar
+                "diary" : self.diary
             ],
             userInfo: nil
         )

@@ -42,7 +42,7 @@ class DiaryViewController: UIViewController {
     // MARK: - 현재 DiaryList를 userDefaults에 저장하는 메서드
     private func saveDiaryList() {
         let data = self.diaryList.map {
-            return Diary(title: $0.title, contents: $0.contents, date: $0.date, isStar: $0.isStar)
+            return Diary(uuidString: $0.uuidString, title: $0.title, contents: $0.contents, date: $0.date, isStar: $0.isStar)
         }
         let userDefaults = UserDefaults.standard
         userDefaults.set(try? PropertyListEncoder().encode(data), forKey: "diary")
@@ -61,26 +61,29 @@ class DiaryViewController: UIViewController {
         }
     }
     
-    // MARK: - Notification.Name("editDiary")으로 노티가 왔을 때 실행되는 메서드
+    // MARK: - "editDiary"로 noti를 받았을때 실행되는 메서드
     @objc func editDiaryNotification(_ notification: Notification) {
         guard let diary = notification.object as? Diary else { return }
-        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
-        self.diaryList[row] = diary
+        guard let index = self.diaryList.firstIndex(where: { $0.uuidString == diary.uuidString }) else { return }
+        self.diaryList[index] = diary
         self.diaryList = self.diaryList.sorted {
             $0.date > $1.date
         }
     }
     
+    // MARK: - "starDiary"로 noti를 받았을때 실행되는 메서드
     @objc func starDiaryNotification(_ notification: Notification) {
         guard let info = notification.object as? [String : Any] else { return }
-        guard let indexPath = info["indexPath"] as? IndexPath else { return }
-        guard let isStar = info["isStar"] as? Bool else { return }
-        self.diaryList[indexPath.row].isStar = isStar
+        guard let diary = info["diary"] as? Diary else { return }
+        guard let index = self.diaryList.firstIndex(where: { $0.uuidString == diary.uuidString }) else { return }
+        self.diaryList[index].isStar = diary.isStar
     }
     
+    // MARK: - "deleteDiary"로 noti를 받았을때 실행되는 메서드
     @objc func deleteDiaryNotification(_ notification: Notification) {
-        guard let indexPath = notification.object as? IndexPath else { return }
-        self.diaryList.remove(at: indexPath.row)
+        guard let uuidString = notification.object as? String else { return }
+        guard let index = self.diaryList.firstIndex(where: { $0.uuidString == uuidString }) else { return }
+        self.diaryList.remove(at: index)
     }
 }
 
@@ -98,7 +101,6 @@ extension DiaryViewController: UICollectionViewDelegate {
         let storyboard = UIStoryboard(name: "DiaryDetailStoryboard", bundle: nil)
         guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
         DiaryDetailViewController.diary = diaryList[indexPath.row]
-        DiaryDetailViewController.indexPath = indexPath
         DiaryDetailViewController.navigationItem.title = diaryList[indexPath.row].title
         self.navigationController?.pushViewController(DiaryDetailViewController, animated: true)
     }

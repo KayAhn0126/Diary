@@ -31,7 +31,7 @@ class WriteDiaryViewController: UIViewController {
     
     // MARK: - 수정 버튼을 통해 WriteDiaryViewController에 진입했을 때 설정 모드로 보이기 위해 설정하는 메서드
     private func configureEditMode() {
-        if case let .edit(_, diary) = self.diaryMode {
+        if case let .edit(diary) = self.diaryMode {
             self.titleTextField.text = diary.title
             self.contentsTextView.text = diary.contents
             self.dateTextField.text = DiaryFormat.swapToDiaryFormat(date: diary.date)
@@ -80,15 +80,14 @@ class WriteDiaryViewController: UIViewController {
         guard let date = self.diaryDate else { return }
         switch self.diaryMode {
         case .new :
-            let newDiary = Diary(title: title, contents: content, date: date, isStar: false)
+            let newDiary = Diary(uuidString: UUID().uuidString, title: title, contents: content, date: date, isStar: false)
             self.delegate?.didSelectRegister(diary: newDiary)
-        case let .edit(indexPath: indexPath, diary: previousDiary) :
-            let editedDiary = Diary(title: title, contents: content, date: date, isStar: previousDiary.isStar)
-            NotificationCenter.default.post(name: NSNotification.Name("editDiary"),
-                                            object: editedDiary,
-                                            userInfo: [
-                                                "indexPath.row" : indexPath.row
-                                            ]
+        case let .edit(diary: previousDiary) :
+            let editedDiary = Diary(uuidString: previousDiary.uuidString, title: title, contents: content, date: date, isStar: previousDiary.isStar)
+            NotificationCenter.default.post(
+                name: NSNotification.Name("editDiary"),
+                object: editedDiary,
+                userInfo: nil
             )
         }
         self.navigationController?.popViewController(animated: true)
