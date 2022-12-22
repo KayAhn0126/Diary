@@ -10,9 +10,7 @@ import UIKit
 class StarViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    
     private var diaryList = [Diary]()
-    
     typealias Item = Diary
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
@@ -44,35 +42,36 @@ class StarViewController: UIViewController {
         self.applySnapShot()
     }
     
-    
+    // MARK: - "editDiary"로 noti를 받았을때 실행되는 메서드
     @objc func editDiaryNotification(_ notification: Notification) {
         guard let diary = notification.object as? Diary else { return }
-        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
-        self.diaryList[row] = diary
+        guard let index = self.diaryList.firstIndex(where: { $0.uuidString == diary.uuidString }) else { return }
+        self.diaryList[index] = diary
         self.diaryList = self.diaryList.sorted(by: {
             $0.date > $1.date
         })
     }
     
-    // MARK: - 즐겨찾기 버튼이 눌렸을때 반응하는 메서드
+    // MARK: - "starDiary"로 noti를 받았을때 실행되는 메서드
     @objc func starDiaryNotification(_ notification: Notification) {
         guard let starDiary = notification.object as? [String : Any] else { return }
         guard let diary = starDiary["diary"] as? Diary else { return }
-        guard let isStar = starDiary["isStar"] as? Bool else { return }
-        guard let indexPath = starDiary["indexPath"] as? IndexPath else { return }
-        if isStar {
+        if diary.isStar {
             self.diaryList.append(diary)
             self.diaryList = self.diaryList.sorted(by: {
                 $0.date > $1.date
             })
         } else {
-            self.diaryList.remove(at: indexPath.row)
+            guard let index = self.diaryList.firstIndex(where: { $0.uuidString == diary.uuidString }) else { return }
+            self.diaryList.remove(at: index)
         }
     }
     
+    // MARK: - "deleteDiary"로 noti를 받았을때 실행되는 메서드
     @objc func deleteDiaryNotification(_ notification: Notification) {
-        guard let indexPath = notification.object as? IndexPath else { return }
-        self.diaryList.remove(at: indexPath.row)
+        guard let uuidString = notification.object as? String else { return }
+        guard let index = self.diaryList.firstIndex(where: { $0.uuidString == uuidString }) else { return }
+        self.diaryList.remove(at: index)
     }
 }
 
@@ -83,7 +82,6 @@ extension StarViewController: UICollectionViewDelegate {
         guard let DiaryDetailViewController = storyboard.instantiateViewController(withIdentifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
         let diary = diaryList[indexPath.row]
         DiaryDetailViewController.diary = diary
-        DiaryDetailViewController.indexPath = indexPath
         DiaryDetailViewController.navigationItem.title = diary.title
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.largeTitleDisplayMode = .automatic
