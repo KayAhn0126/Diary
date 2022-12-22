@@ -10,9 +10,7 @@ import UIKit
 class StarViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    
     private var diaryList = [Diary]()
-    
     typealias Item = Diary
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     

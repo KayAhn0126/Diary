@@ -11,8 +11,8 @@ final class DiaryDetailViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var dateTextField: UITextField!
-    var starButton: UIBarButtonItem?
     
+    var starButton: UIBarButtonItem?
     var diary: Diary?
     
     override func viewDidLoad() {
