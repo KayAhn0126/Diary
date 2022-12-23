@@ -21,9 +21,9 @@ class DiaryViewController: UIViewController {
         super.viewDidLoad()
         collectionView.delegate = self
         configureDataSource()
-        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name("starDiary"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteDiaryNotification(_:)), name: Notification.Name("deleteDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name(NotificationPostIdentifier.editDiary), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name(NotificationPostIdentifier.starDiary), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteDiaryNotification(_:)), name: Notification.Name(NotificationPostIdentifier.deleteDiary), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {

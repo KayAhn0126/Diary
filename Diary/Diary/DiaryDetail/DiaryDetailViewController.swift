@@ -18,8 +18,8 @@ final class DiaryDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDetailView()
-        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name("starDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name(NotificationPostIdentifier.editDiary), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name(NotificationPostIdentifier.starDiary), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +62,7 @@ final class DiaryDetailViewController: UIViewController {
     @IBAction func tapDeleteButton(_ sender: UIButton) {
         guard let uuidString = self.diary?.uuidString else { return }
         NotificationCenter.default.post(
-            name: NSNotification.Name("deleteDiary"),
+            name: NSNotification.Name(NotificationPostIdentifier.deleteDiary),
             object: uuidString,
             userInfo: nil
         )
@@ -82,7 +82,7 @@ final class DiaryDetailViewController: UIViewController {
         self.diary?.isStar = !isStar
         
         NotificationCenter.default.post(
-            name: NSNotification.Name("starDiary"),
+            name: NSNotification.Name(NotificationPostIdentifier.starDiary),
             object: [
                 "diary" : self.diary
             ],
