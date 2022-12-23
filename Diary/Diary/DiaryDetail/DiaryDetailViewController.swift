@@ -18,7 +18,10 @@ final class DiaryDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDetailView()
+        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(starDiaryNotification(_:)), name: Notification.Name("starDiary"), object: nil)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let diary = self.diary else { return }
@@ -51,8 +54,7 @@ final class DiaryDetailViewController: UIViewController {
         
         writeDiaryViewController.diaryMode = .edit(diary: diary)
         writeDiaryViewController.navigationItem.title = "일기 수정"
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(editDiaryNotification(_:)), name: Notification.Name("editDiary"), object: nil)
+    
         self.navigationController?.pushViewController(writeDiaryViewController, animated: true)
     }
     
@@ -65,13 +67,6 @@ final class DiaryDetailViewController: UIViewController {
             userInfo: nil
         )
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    // MARK: - "editDiary"로 noti를 받았을때 실행되는 메서드
-    @objc func editDiaryNotification(_ notification: Notification) {
-        guard let diary = notification.object as? Diary else { return }
-        self.diary = diary
-        self.configureDetailView()
     }
     
     // MARK: - star(즐겨찾기) 버튼이 눌렸을 때 실행되는 메서드
@@ -93,6 +88,21 @@ final class DiaryDetailViewController: UIViewController {
             ],
             userInfo: nil
         )
+    }
+    
+    // MARK: - "editDiary"로 noti를 받았을때 실행되는 메서드
+    @objc func editDiaryNotification(_ notification: Notification) {
+        guard let diary = notification.object as? Diary else { return }
+        self.diary = diary
+        self.configureDetailView()
+    }
+    
+    // MARK: - "deleteDiary"로 noti를 받았을때 실행되는 메서드
+    @objc func starDiaryNotification(_ notification: Notification) {
+        guard let starDiary = notification.object as? [String : Any] else { return }
+        guard let diary = starDiary["diary"] as? Diary else { return }
+        self.diary = diary
+        self.configureDetailView()
     }
     
     deinit {
