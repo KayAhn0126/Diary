@@ -142,7 +142,7 @@ extension DiaryViewController: UICollectionViewDelegate {
 - 두 가지 방법이 있는데 하나는 
     - 1. 탭이 눌릴때마다 해당 탭의 가장 윗단인 rootVC로 가는 로직 구현하기
     - 2. 수정이 일어날때 마다 notification을 보내 업데이트 하기
-- 처음에는 1번으로 진행하려고 했는데 이 또한 탭을 누르면 이전 작업물이 메모리에서 해제(popViewController)되는 상황이라 2번으로 진행했다.
+- 1번으로 진행하려고 했는데 이 또한 탭을 누르면 이전 작업물이 메모리에서 해제(popViewController)되는 상황이라 사용자 경험을 고려해 2번으로 진행했다.
 - 먼저 현재 코드는 DetailDiaryVC에서 수정버튼을 누르면 "editDiary" 노티에 대한 구독을 시작하는데, 문제는 일기장 탭에서는 DetailDiaryVC에 들어와 있고()"editDiary" 노티에 대한 구독 안하고 있음), 즐겨찾기에서는 수정버튼을 눌러 "editDiary" 노티에 대한 구독을 하고있다. 즉 변경이 일어나면 즐겨찾기의 DetailDiaryVC의 값들만 바뀌고 있는 상황.
 - 수정버튼을 클릭하면 notification을 구독하는 코드를 DetailDiary의 viewDidLoad()에 넣어주어서 수정이 일어나자 마자 바로 업데이트를 할 수 있게 만들어줬다.
 - 아래는 데이터 일관성 문제와 해결에 대한 GIF
